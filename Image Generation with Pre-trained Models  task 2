@@ -1,0 +1,34 @@
+# Install necessary libraries
+!pip install transformers torch torchvision
+
+# Import libraries
+import torch
+from PIL import Image
+from transformers import CLIPProcessor, CLIPModel
+
+# Load CLIP model
+clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+
+# Function to generate image from text using DALL-E (hypothetical, as direct DALL-E integration isn't available)
+def generate_image(prompt):
+    # Encode text prompt using CLIP
+    inputs = clip_processor(text=prompt, return_tensors="pt")
+    text_features = clip_model.get_text_features(**inputs)
+
+    # Dummy function to simulate image generation from text features (replace with actual DALL-E or similar model integration)
+    generated_image = torch.randn(3, 256, 256)  # Placeholder for generated image tensor
+    generated_image = torch.clamp(generated_image, 0, 1)  # Ensure image values are in [0, 1]
+    generated_image = (generated_image * 255).to(torch.uint8)  # Convert to uint8 for PIL
+
+    return generated_image
+
+# Example usage
+prompt = "a surreal landscape of floating islands"
+
+# Generate image from text prompt
+generated_image_tensor = generate_image(prompt)
+generated_image = Image.fromarray(generated_image_tensor.permute(1, 2, 0).cpu().numpy())
+
+# Display generated image
+generated_image.show()
